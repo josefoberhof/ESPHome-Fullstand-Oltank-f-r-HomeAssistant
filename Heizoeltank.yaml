@@ -1,0 +1,169 @@
+esphome:
+  name: oltankfullstand
+  friendly_name: Öltank Füllstand
+esp32:
+  board: wemos_d1_mini32
+
+web_server:
+  port: 80
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  domain: .fritz.box
+  manual_ip:
+    static_ip: 192.168.178.92
+    gateway: 192.168.178.1
+    subnet: 255.255.255.0
+    dns1: 192.168.178.6
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Oltank-Fullstand"
+    password: !secret ap_password
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret esphome_api_key
+
+logger:
+
+ota:
+  - platform: esphome
+    password: !secret esphome_api
+
+captive_portal:
+uart:
+  id: uart_id
+  tx_pin: GPIO17
+  rx_pin: GPIO16
+  baud_rate: 9600
+
+# Sensor definition  
+sensor:
+#Ultrasonic Sensor
+  - platform: "jsn_sr04t"
+    name: "Distanz"
+    update_interval: 1min
+#    model: aj_sr04m
+    uart_id: uart_id
+    id: ultrasonic_sensor
+    filters:
+      - lambda: return x * 100;
+      - filter_out: nan
+    unit_of_measurement: cm
+    accuracy_decimals: 1
+
+#####################################
+#  Volumen nach berechnung 
+
+  - platform: template
+    name: "Heizöl Liter"
+    lambda: |-
+      float deckel_abstand = id(tank_deckel_abstand).state;
+      float radius = id(tank_durchmesser).state / 2;
+      float sensor = id(ultrasonic_sensor).state;
+      float laenge = id(tank_lange).state;
+      float berechnung = (deckel_abstand + (radius * 2)) - sensor;
+      // Hier kannst du deine komplexere Berechnung durchführen
+      float x = laenge * (radius * radius * acos(1 - (berechnung / radius)) - ((radius - berechnung) * sqrt(2 * radius * berechnung - (berechnung * berechnung)))) / 1000;
+      return x; 
+    update_interval: 1min
+    unit_of_measurement: 'Liter'
+    accuracy_decimals: 0
+# Berechnung der Füllhöhe
+  - platform: template
+    name: "Füllhöhe"
+    lambda: |-
+      float deckel_abstand = id(tank_deckel_abstand).state;
+      float radius = id(tank_durchmesser).state / 2;
+      float sensor = id(ultrasonic_sensor).state;
+      float laenge = id(tank_lange).state;  // Korrektur hier
+      float berechnung = (deckel_abstand + (radius * 2)) - sensor;
+      return berechnung;  // Korrektur hier
+    update_interval: 1min
+    unit_of_measurement: 'cm'
+    accuracy_decimals: 0
+# Berechnung nach Peiltabelle
+  - platform: template
+    name: "Peiltabelle"
+    lambda: |-
+      float deckel_abstand = id(tank_deckel_abstand).state;
+      float radius = id(tank_durchmesser).state / 2;
+      float sensor = id(ultrasonic_sensor).state;
+      float laenge = id(tank_lange).state;
+      float berechnung = (deckel_abstand + (radius * 2)) - sensor;
+      return berechnung;
+    filters: 
+      - calibrate_linear:
+#         method: least_squares
+         datapoints:
+          # Map 10.0 (from sensor) to 168,9 (true value)
+          - 10.0 -> 168.9
+          - 15.0 -> 308.5
+          - 20.0 -> 472.6
+          - 25.0 -> 657.0
+          - 30.0 -> 859.0
+          - 35.0 -> 1076.4
+          - 40.0 -> 1307.3
+          - 45.0 -> 1550.2
+          - 50.0 -> 1803.6
+          - 55.0 -> 2066.3
+          - 60.0 -> 2337.0
+          - 65.0 -> 2614.5
+          - 70.0 -> 2897.8
+          - 75.0 -> 3185.6
+          - 80.0 -> 3477.0
+          - 85.0 -> 3767.7
+          - 90.0 -> 4054.7
+          - 95.0 -> 4336.9
+          - 100.0 -> 4613.2
+          - 105.0 -> 4882.3
+          - 110.0 -> 5143.3
+          - 115.0 -> 5394.7
+          - 120.0 -> 5635.3
+          - 125.0 -> 5863.6
+          - 130.0 -> 6078.1
+          - 135.0 -> 6276.8
+          - 140.0 -> 6457.4
+    update_interval: 1min
+    unit_of_measurement: 'Liter'
+# Helfer von HomeAssistant
+  - platform: homeassistant
+    name: "Tanklänge"
+    entity_id: input_number.oltank_lange
+    id: tank_lange
+
+  - platform: homeassistant
+    name: "Tankdurchmesser"
+    entity_id: input_number.oltank_durchmesser
+    id: tank_durchmesser
+# Abstand vom Sensor bis Tankoberkante innen
+  - platform: homeassistant
+    name: "Deckelabstand"
+    entity_id: input_number.oltank_deckelabstand
+    id: tank_deckel_abstand
+  # Uptime Sensor - Zeit seit letztem rebbot
+  - platform: uptime
+    name: Uptime Sensor
+    update_interval: 60s
+# Ermittlung der WLAN-Signalstärke alle 60s 
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    id: wifi_signal_db
+    update_interval: 60s
+# Button definition
+button:
+# Neustart ESP
+  - platform: restart
+    name: "Restart"
+
+# Text Sensor definition
+# WIFI Info Bereich
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "IP"
+    ssid:
+      name: "SSID"
+    mac_address:
+      name: "Mac"
