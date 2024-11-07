@@ -5,7 +5,7 @@ Der Sensor ist in einem liegenden Zylindertank (DIN6608 D) mit einem Reduzierst�
 
 Zubehör:
 ESP32 D1 mini
-AJ-SR04M Sensor
+AJ-SR04M oder JSN-SR04T ultrasonic sensor
 Reduzierstück 1 1/4" AG x 1" IG
 
 
