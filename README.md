@@ -11,6 +11,7 @@ input_number.oltank_deckelabstand
 Zubehör:
 ESP32 D1 mini
 AJ-SR04M oder JSN-SR04T ultrasonic sensor
+47kOhm Wiederstand R19 
 Reduzierstück 1 1/4" AG x 1" IG
 
 
