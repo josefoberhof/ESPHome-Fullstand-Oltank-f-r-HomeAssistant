@@ -13,4 +13,4 @@ Zubehör mit ***Affiliat*** Link: <br/>
 [Amazon](https://amzn.to/4fyJjpB) AJ-SR04M oder JSN-SR04T ultrasonic sensor [ESPHome Sensor Component](https://esphome.io/components/sensor/jsn_sr04t.html)  <br/>
 [Amazon](https://amzn.to/3NYAWrK) 47kOhm Wiederstand R19 <br/> 
 [Amazon](https://amzn.to/4hGuBP0) Reduzierstück 1" AG x 3/4" IG <br/> 
-
+[Peilstabtabellen](https://kraemer-industriebehaelter.de/download/peiltabellen)
