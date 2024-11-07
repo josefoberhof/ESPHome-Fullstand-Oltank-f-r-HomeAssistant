@@ -8,7 +8,7 @@ input_number.oltank_durchmesser <br/>
 input_number.oltank_deckelabstand <br/> 
 
 
-Zubehör mit ***Affiliat*** Link: <br/> 
+Zubehör und ***Affiliat*** Links: <br/> 
 [Amazon](https://amzn.to/3YDi2vo) ESP32 D1 mini  <br/> 
 [Amazon](https://amzn.to/4fyJjpB) AJ-SR04M oder JSN-SR04T ultrasonic sensor [ESPHome Sensor Component](https://esphome.io/components/sensor/jsn_sr04t.html)  <br/>
 [Amazon](https://amzn.to/3NYAWrK) 47kOhm Wiederstand R19 <br/> 
