@@ -9,9 +9,9 @@ input_number.oltank_deckelabstand <br/>
 
 
 Zubehör mit ***Affiliat*** Link: <br/> 
-ESP32 D1 mini [Amazon](https://amzn.eu/d/dWja9GM) <br/> 
-AJ-SR04M oder JSN-SR04T ultrasonic sensor [Amazon](https://amzn.eu/d/jeTB6Rc) <br/>
-47kOhm Wiederstand R19 [Amazon](https://amzn.eu/d/bL2I8bK)<br/> 
-Reduzierstück 1" AG x 3/4" IG [Amazon](https://amzn.eu/d/2aC6UXC) IG <br/> 
+ESP32 D1 mini [Amazon](https://amzn.to/3YDi2vo) <br/> 
+AJ-SR04M oder JSN-SR04T ultrasonic sensor [Amazon](https://amzn.to/4fyJjpB) <br/>
+47kOhm Wiederstand R19 [Amazon](https://amzn.to/3NYAWrK)<br/> 
+Reduzierstück 1" AG x 3/4" IG [Amazon](https://amzn.to/4hGuBP0) IG <br/> 
 
 
